@@ -959,11 +959,11 @@ public class Instance {
 				Element ele_var=vr.write_vcf2variants(doc,"_"+track.get_ID(),mode,bpp,Chr,Coordinate[0],Coordinate[1]);
 			//	Element ele_var=vr.write_vcf2variants(doc,"_"+track.get_ID(),Consts.MODE_PACK,bpp,Chr,Coordinate[0],Coordinate[1]);
 				//Cancel Dense-mode-bandwidth saving. transfer all variants to client.
+				if(Coordinate[1]-Coordinate[0]>=VcfReader.BinMethodThreshold)
+					return;
 				add_att_ifParam(track,ele_var);
 				if(PvarID!=null&&!track.get_ID().equals(PvarID))
 					ele_var.setAttribute(Consts.XML_TAG_ID, "_"+PvarID);
-				if(Coordinate[1]-Coordinate[0]>=3000000)
-					return;
 				Ele_var = new Individual(ele_var).mergeWithDBSNP(CfgReader.getBasic(Assembly,Consts.FORMAT_SNP).get_Path(Chr), Chr, Coordinate[0], Coordinate[1], doc);
 				doc.getElementsByTagName(DATA_ROOT).item(0).appendChild(Ele_var);
 				doc.getElementsByTagName(DATA_ROOT).item(0).removeChild(ele_var);
@@ -973,7 +973,7 @@ public class Instance {
 				BasicAnnosReader bar=new BasicAnnosReader(Panno.get_Path(Chr));
 				Element ele_anno=bar.write_ba2elements(doc, "_"+track.get_ID(), Chr, Coordinate[0], Coordinate[1], bpp);
 				add_att_ifParam(track,ele_anno);
-				if(Coordinate[1]-Coordinate[0]>=3000000)
+				if(Coordinate[1]-Coordinate[0]>=VcfReader.BinMethodThreshold)
 					return;
 				VariantAnalysis ee = new VariantAnalysis(doc, rr, ele_anno, Ele_fanno, Ele_var, Chr);
 				Ele_anno=ee.deal();
@@ -999,7 +999,7 @@ public class Instance {
 				gr3 = new GDFReader(Pclns.get(track.get_ID()).get_Path(Chr));
 				Element ele_cln=gr3.write_gdf2elements(doc, "_"+track.get_ID(), Chr,(int) Coordinate[0],(int) Coordinate[1]);
 				add_att_ifParam(track,ele_cln);
-//				if(Coordinate[1]-Coordinate[0]>=3000000)
+//				if(Coordinate[1]-Coordinate[0]>=VcfReader.BinMethodThreshold)
 //					return;
 				//////////////// Cancelled in Family genome browser//////////////
 		//		GdfElementSelector ges=new GdfElementSelector(doc,Ele_anno,Ele_var);

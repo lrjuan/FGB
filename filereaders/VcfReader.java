@@ -1192,8 +1192,8 @@ public class VcfReader {
 		else{
 			doc.getElementsByTagName(DATA_ROOT).item(0).removeChild(variants[0].getVariantsElement());
 			String ind_id = vcfSample.getSelectedNames()[0];
-			e1 = var_value2xml(doc, track, ind_id+"L",var_value_list[0], start, end, (int)step); // Left
-			e1 = var_value2xml(doc, track, ind_id+"R",var_value_list[1], start, end, (int)step); // Right
+			e1 = var_value2xml(doc, track, "_"+ind_id+"L",var_value_list[0], start, end, (int)step); // Left
+			e1 = var_value2xml(doc, track, "_"+ind_id+"R",var_value_list[1], start, end, (int)step); // Right
 		}
 		variants = null;
 		return e1;
