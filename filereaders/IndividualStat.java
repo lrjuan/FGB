@@ -165,7 +165,7 @@ public class IndividualStat {
 			 */
 			//This is for recombination event detection
 			if(ifTrioAvailable){
-				Element[] ele_vars = new VcfReader(pvar,chr).write_trio(doc, oid, chr, start, end, false);
+				Element[] ele_vars = new VcfReader(pvar,chr).write_trio(doc, oid, chr, start, end, false, true);
 				NodeList f_vars = ele_vars[1].getChildNodes();
 				NodeList m_vars = ele_vars[2].getChildNodes();
 				int f_num = f_vars.getLength();
@@ -234,7 +234,7 @@ public class IndividualStat {
 					for(int k=0;k<annos.length;k++)
 						ele_annos[k]=bar[k].write_ba2elements(doc, annos[k].get_ID(), chr, subrange[0]+1, subrange[1], 0.5);
 					
-					Element[] ele_vars = vr.write_trio(doc, oid, chr, subrange[0]+1, subrange[1], true);
+					Element[] ele_vars = vr.write_trio(doc, oid, chr, subrange[0]+1, subrange[1], true, false);
 					GeneScores[j]=(int)GeneScores[j]|calc_Mut(doc,ref,ele_annos,ele_vars,chr,Genes.get_GeneSymbol(j));
 				}
 				

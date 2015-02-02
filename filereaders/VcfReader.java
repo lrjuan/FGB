@@ -696,7 +696,7 @@ public class VcfReader {
 		variants = null;
 		return e1;
 	}
-	public Element[] write_trio(Document doc, String oid, String chr, long start, long end, boolean scan){
+	public Element[] write_trio(Document doc, String oid, String chr, long start, long end, boolean scan, boolean recombination){
 		float qualLimit = Float.parseFloat((String) (this.track.get_Parameter(VCF_QUAL_LIMIT)));
 		TabixReaderForVCF vcf_tb = null;
 		String[] filterLimit = getFilterLimit();
@@ -776,7 +776,7 @@ public class VcfReader {
 						continue;
 					for (int i = 0; i < len; i++) 
 						if (vs[i] != null){
-							if(i == o || scan || end - start < BinMethodThreshold)
+							if(i == o || scan || end - start < BinMethodThreshold || recombination)
 								variants[i].addVariant(vcf,i, vs[i]);
 							else{
 								int parent = 0;
@@ -816,7 +816,7 @@ public class VcfReader {
 		}
 		Element[] e = new Element[3];
 		e[0] = variants[o].getVariantsElement();
-		if(scan || end - start < BinMethodThreshold){
+		if(scan || end - start < BinMethodThreshold || recombination){
 			e[1] = variants[f].getVariantsElement();
 			e[2] = variants[m].getVariantsElement();
 		}
