@@ -27,6 +27,7 @@ public class VcfReader {
 	 */
 	private double bppLimit;
 	public static int BinMethodThreshold = 3000000;
+	public static int BinNum = 77;
 
 	public VcfReader(Annotations track, String Chr) {
 		this.bppLimit = 0.5;
@@ -46,8 +47,8 @@ public class VcfReader {
 				filter_header.put("PASS", false);
 				String str = null;
 				while ((line = vcf_tb.readLine())!=null&&line.startsWith("#")) {
-					str = line.substring(2, 8);
-					if (str.equalsIgnoreCase("FILTER")) {
+					str = line.substring(2, 9);
+					if (str.equalsIgnoreCase("FILTER=")) {
 						int left = line.indexOf('<');
 						int right = line.lastIndexOf('>');
 						String[] line_temp = line.substring(left + 1, right).split("ID=|,Description=");
@@ -451,14 +452,14 @@ public class VcfReader {
 		String mode=Consts.MODE_PACK;
 		double bpp = 0.5;
 		
-		int[][] var_value_list = new int[2][80];
-		double step = (end - start) / 80.0;
+		int[][] var_value_list = new int[2][BinNum];
+		double step = (end - start) / (double)BinNum;
 		StringSplit splitslash = new StringSplit('/');
 		StringSplit splitpipe = new StringSplit('|');
 		StringSplit splitcolon = new StringSplit(':');
 		int ref_index = 0;
 		if(end-start>=BinMethodThreshold){
-			for(int i = 0 ; i < 80 ; i++){
+			for(int i = 0 ; i < BinNum ; i++){
 				var_value_list[0][i] = 0;
 				var_value_list[1][i] = 0;
 			}
@@ -570,14 +571,14 @@ public class VcfReader {
 		String mode=Consts.MODE_PACK;
 		double bpp = 0.5;
 
-		int[][] var_value_list = new int[2][80];
-		double step = (end - start) / 80.0;
+		int[][] var_value_list = new int[2][BinNum];
+		double step = (end - start) / (double)BinNum;
 		StringSplit splitslash = new StringSplit('/');
 		StringSplit splitpipe = new StringSplit('|');
 		StringSplit splitcolon = new StringSplit(':');
 		int ref_index = 0;
 		if(end-start>=BinMethodThreshold){
-			for(int i = 0 ; i < 80 ; i++){
+			for(int i = 0 ; i < BinNum ; i++){
 				var_value_list[0][i] = 0;
 				var_value_list[1][i] = 0;
 			}
@@ -712,13 +713,13 @@ public class VcfReader {
 		String mode=Consts.MODE_PACK;
 		double bpp = 0.5;
 		
-		int[][] var_value_list = new int[4][80];
-		double step = (end - start) / 80.0;
+		int[][] var_value_list = new int[4][BinNum];
+		double step = (end - start) / (double)BinNum;
 		StringSplit splitslash = new StringSplit('/');
 		StringSplit splitpipe = new StringSplit('|');
 		if(end-start>=BinMethodThreshold)
 			for(int i = 0 ; i < 4 ; i++)
-				for(int j = 0 ; j < 80 ; j++)
+				for(int j = 0 ; j < BinNum ; j++)
 					var_value_list[i][j] = 0;
 
 		if (this.track.has_Parameter(VCF_HEADER_SAMPLE)) {
@@ -1080,12 +1081,12 @@ public class VcfReader {
 		VcfSample vcfSample = null;
 		Variants[] variants;
 		
-		int[][] var_value_list = new int[2][80];
-		double step = (end - start) / 80.0;
+		int[][] var_value_list = new int[2][BinNum];
+		double step = (end - start) / (double)BinNum;
 		StringSplit splitslash = new StringSplit('/');
 		StringSplit splitpipe = new StringSplit('|');
 		if(end-start>=BinMethodThreshold){
-			for(int i = 0 ; i < 80 ; i++){
+			for(int i = 0 ; i < BinNum ; i++){
 				var_value_list[0][i] = 0;
 				var_value_list[1][i] = 0;
 			}
@@ -1202,7 +1203,7 @@ public class VcfReader {
 		Element ele = doc.createElement(Consts.XML_TAG_VALUES);
 		StringBuffer valueList = new StringBuffer();
 		valueList.append(var_value_list[0]);
-		for(int i = 1 ; i < 80 ; i++)
+		for(int i = 1 ; i < BinNum ; i++)
 			valueList.append(","+var_value_list[i]);
 		ele.setAttribute(Consts.XML_TAG_ID, id);
 		ele.setAttribute(XML_TAG_SUPERID, track);
