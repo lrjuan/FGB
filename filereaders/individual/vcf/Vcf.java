@@ -455,6 +455,8 @@ public class Vcf {
 			if (one.length() == Ref.length()) {
 				// SNV
 				int index = firstNotEqualPos(Ref, one);
+				if(index >= one.length())//prevent Ref == one, temporary solution
+					index = one.length() - 1;
 				curV.setType(VARIANT_TYPE_SNV);
 				curV.setFrom(Pos + index);
 				curV.setTo(Pos + index);
