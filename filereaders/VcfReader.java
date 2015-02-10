@@ -772,7 +772,10 @@ public class VcfReader {
 					if (vcf.shouldBeFilteredByQualLimit(qualLimit) || vcf.shouldBeFilteredByFilterLimit(filterLimit))
 						continue;
 					
-					vs = vcf.getVariants_trio(o,f,m,scan, end-start>=BinMethodThreshold);
+					boolean largescale = false;
+					if(end-start>=BinMethodThreshold)
+						largescale = true;
+					vs = vcf.getVariants_trio(o,f,m,scan,largescale);
 					if(vs == null)
 						continue;
 					for (int i = 0; i < len; i++) 
@@ -787,9 +790,9 @@ public class VcfReader {
 								String[] homo = vs[i][0].getHomo().split(",");
 								int resultindex = 0;
 								if(homo[0].indexOf("0")==0)
-									resultindex = 0;
-								else
 									resultindex = 1;
+								else
+									resultindex = 0;
 								int idx = (int)((vs[i][0].getFrom()-start)/step);
 								if (idx < 0)
 									idx = 0;
