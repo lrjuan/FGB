@@ -166,9 +166,19 @@ public class IndividualStat {
 			//This is for recombination event detection
 			if(ifTrioAvailable){
 				int t = 20;
+				
 				Element[] ele_vars = new VcfReader(pvar,chr).write_trio(doc, oid, chr, start, end, true, true);
 				NodeList f_vars = ele_vars[1].getChildNodes();
 				NodeList m_vars = ele_vars[2].getChildNodes();
+				for(int v=0;v<f_vars.getLength();v++)
+					if(((Element)f_vars.item(v)).getAttribute(Consts.XML_TAG_HOMO).indexOf("0")<0)
+						ele_vars[1].removeChild(f_vars.item(v));
+				for(int v=0;v<m_vars.getLength();v++)
+					if(((Element)m_vars.item(v)).getAttribute(Consts.XML_TAG_HOMO).indexOf("0")<0)
+						ele_vars[2].removeChild(m_vars.item(v));
+				
+				f_vars = ele_vars[1].getChildNodes();
+				m_vars = ele_vars[2].getChildNodes();
 				int f_num = f_vars.getLength();
 				int m_num = m_vars.getLength();
 				if(f_num > 2*VcfReader.BinNum && m_num > 2*VcfReader.BinNum){
