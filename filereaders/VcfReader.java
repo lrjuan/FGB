@@ -772,7 +772,7 @@ public class VcfReader {
 					if (vcf.shouldBeFilteredByQualLimit(qualLimit) || vcf.shouldBeFilteredByFilterLimit(filterLimit))
 						continue;
 					
-					vs = vcf.getVariants_trio(o,f,m,scan);
+					vs = vcf.getVariants_trio(o,f,m,scan, end-start>=BinMethodThreshold);
 					if(vs == null)
 						continue;
 					for (int i = 0; i < len; i++) 
@@ -784,20 +784,30 @@ public class VcfReader {
 								if(i == m)
 									parent = 1;
 									
-								String homo = vs[i][0].getHomo();
-								if(Vcf.containChar(homo, '|')){
-									splitpipe.split(homo);
+								String[] homo = vs[i][0].getHomo().split(",");
+								int resultindex = 0;
+								if(homo[0].indexOf("0")==0)
+									resultindex = 0;
+								else
+									resultindex = 1;
+								int idx = (int)((vs[i][0].getFrom()-start)/step);
+								if (idx < 0)
+									idx = 0;
+								else if(idx>=BinNum)
+									idx = BinNum-1;
+								if(Vcf.containChar(homo[1], '|')){
+									splitpipe.split(homo[1]);
 									if(!splitpipe.getResultByIndex(0).equals("0"))
-										var_value_list[2*parent+0][(int)((vs[i][0].getFrom()-start)/step)]++;
+										var_value_list[2*parent+resultindex][idx]--;
 									if(!splitpipe.getResultByIndex(1).equals("0"))
-										var_value_list[2*parent+1][(int)((vs[i][0].getFrom()-start)/step)]++;
+										var_value_list[2*parent+resultindex][idx]++;
 								}
-								else if(Vcf.containChar(homo,'/')){
-									splitslash.split(homo);
+								else if(Vcf.containChar(homo[1],'/')){
+									splitslash.split(homo[1]);
 									if(!splitslash.getResultByIndex(0).equals("0"))
-										var_value_list[2*parent+0][(int)((vs[i][0].getFrom()-start)/step)]++;
+										var_value_list[2*parent+resultindex][idx]--;
 									if(!splitslash.getResultByIndex(1).equals("0"))
-										var_value_list[2*parent+1][(int)((vs[i][0].getFrom()-start)/step)]++;
+										var_value_list[2*parent+resultindex][idx]++;
 								}
 							}
 						}

@@ -716,7 +716,7 @@ public class Vcf {
 
 		return vs;
 	}
-	public Variant[][] getVariants_trio(int o, int f, int m, boolean scan) {
+	public Variant[][] getVariants_trio(int o, int f, int m, boolean scan, boolean largescale) {
 		if (!samples.containGT())
 			return null;
 		
@@ -748,10 +748,10 @@ public class Vcf {
 			int len = 0;
 			for (int vIndex : vIndexesf) {
 				vs[f][len] = variants[vIndex - 1];
-				if(scan) //Scan need genotype of parents to determine the possibility of compound heterozygous
+				if(!largescale||scan) //Scan need genotype of parents to determine the possibility of compound heterozygous
 					vs[f][len].setHomo(fhomo);
 				else     //Visualization need genotype of offspring to plot variant in correct allele
-					vs[f][len].setHomo(ohomo);
+					vs[f][len].setHomo(ohomo+","+fhomo);
 				vs[f][len].setMaxAF(getMaxAF());
 				len++;
 			}
@@ -763,10 +763,10 @@ public class Vcf {
 			int len = 0;
 			for (int vIndex : vIndexesm) {
 				vs[m][len] = variants[vIndex - 1];
-				if(scan) //Scan need genotype of parents to determine the possibility of compound heterozygous
+				if(!largescale||scan) //Scan need genotype of parents to determine the possibility of compound heterozygous
 					vs[m][len].setHomo(mhomo);
 				else     //Visualization need genotype of offspring to plot variant in correct allele
-					vs[m][len].setHomo(ohomo);
+					vs[m][len].setHomo(ohomo+","+mhomo);
 				vs[m][len].setMaxAF(getMaxAF());
 				len++;
 			}
@@ -780,6 +780,16 @@ public class Vcf {
 				om = true;
 			if(fhomo.indexOf("0")<0 && ohomo.indexOf("0")>=0)
 				of = true;
+			/////////////
+			/* may be useful in recombination event detection
+			boolean mo = false;
+			boolean fo = false;
+			if(ohomo.indexOf("0")<0 && mhomo.indexOf("0")>=0)
+				mo = true;
+			if(ohomo.indexOf("0")<0 && fhomo.indexOf("0")>=0)
+				fo = true;
+			*/
+			//////////
 			if(om && of){//father : 1|1, mother : 1|1, offspring : 0|1
 //we can say we do not know the whether the variant is inherited from mother or father
 				return null;
@@ -805,7 +815,10 @@ public class Vcf {
 				int len = 0;
 				for (int vIndex : vIndexesm) {
 					vs[m][len] = variants[vIndex - 1];
-					vs[m][len].setHomo(ohomo);
+					if(largescale)
+						vs[m][len].setHomo(ohomo+","+mhomo);
+					else
+						vs[m][len].setHomo(mhomo);
 					vs[m][len].setMaxAF(getMaxAF());
 					len++;
 				}
@@ -817,7 +830,10 @@ public class Vcf {
 				int len = 0;
 				for (int vIndex : vIndexesf) {
 					vs[f][len] = variants[vIndex - 1];
-					vs[f][len].setHomo(ohomo);
+					if(largescale)
+						vs[f][len].setHomo(ohomo+","+fhomo);
+					else
+						vs[f][len].setHomo(fhomo);
 					vs[f][len].setMaxAF(getMaxAF());
 					len++;
 				}

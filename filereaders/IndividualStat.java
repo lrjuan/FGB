@@ -166,34 +166,32 @@ public class IndividualStat {
 			//This is for recombination event detection
 			if(ifTrioAvailable){
 				int t = 20;
-				Element[] ele_vars = new VcfReader(pvar,chr).write_trio(doc, oid, chr, start, end, false, true);
+				Element[] ele_vars = new VcfReader(pvar,chr).write_trio(doc, oid, chr, start, end, true, true);
 				NodeList f_vars = ele_vars[1].getChildNodes();
 				NodeList m_vars = ele_vars[2].getChildNodes();
 				int f_num = f_vars.getLength();
 				int m_num = m_vars.getLength();
-				int f_flag = 0;
-				int m_flag = 0;
-				String homo1 = "";
-				String homo2 = "";
-				for(int k = 0 ; k < (t<f_num?t:f_num) ; k++){
-					homo1 = ((Element)f_vars.item(k)).getAttribute(Consts.XML_TAG_HOMO);
-					homo2 = ((Element)f_vars.item(f_num - k - 1)).getAttribute(Consts.XML_TAG_HOMO);
-					if(Vcf.containChar(homo1, '/') || Vcf.containChar(homo2, '/') || homo1.indexOf("0") == homo2.indexOf("0")){
-						f_flag ++;
-						break;
+				if(f_num > 2*VcfReader.BinNum && m_num > 2*VcfReader.BinNum){
+					int f_flag = 0;
+					int m_flag = 0;
+					String homo1 = "";
+					String homo2 = "";
+					for(int k = 0 ; k < t ; k++){
+						homo1 = ((Element)f_vars.item(k)).getAttribute(Consts.XML_TAG_HOMO);
+						homo2 = ((Element)f_vars.item(f_num - k - 1)).getAttribute(Consts.XML_TAG_HOMO);
+						if(Vcf.containChar(homo1, '/') || Vcf.containChar(homo2, '/') || homo1.indexOf("0") == homo2.indexOf("0"))
+							f_flag ++;
 					}
-				}
-				for(int k = 0 ; k < (t<m_num?t:m_num) ; k++){
-					homo1 = ((Element)m_vars.item(k)).getAttribute(Consts.XML_TAG_HOMO);
-					homo2 = ((Element)m_vars.item(m_num - k - 1)).getAttribute(Consts.XML_TAG_HOMO);
-					if(Vcf.containChar(homo1, '/') || Vcf.containChar(homo2, '/') || homo1.indexOf("0") == homo2.indexOf("0")){
-						m_flag ++;
-						break;
+					for(int k = 0 ; k < t ; k++){
+						homo1 = ((Element)m_vars.item(k)).getAttribute(Consts.XML_TAG_HOMO);
+						homo2 = ((Element)m_vars.item(m_num - k - 1)).getAttribute(Consts.XML_TAG_HOMO);
+						if(Vcf.containChar(homo1, '/') || Vcf.containChar(homo2, '/') || homo1.indexOf("0") == homo2.indexOf("0"))
+							m_flag ++;
 					}
-				}
-				if(f_flag < 3 &&m_flag < 3){
-					CytoScores[i]=(int)CytoScores[i]|1;
-					CytoScores[i]=(int)CytoScores[i]|1<<8;
+					if(f_flag < 3 || m_flag < 3){
+						CytoScores[i]=(int)CytoScores[i]|1;
+						CytoScores[i]=(int)CytoScores[i]|1<<8;
+					}
 				}
 			}
 			//////////////////////////
