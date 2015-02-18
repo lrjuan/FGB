@@ -42,30 +42,9 @@ be displayed in the FGB.
 4. In addition, tracks in 'Basic' groups, including hg19 reference sequence,
 cytoBand annotation, dbSNP database, HGNC genes, RefSeq Genes, Linkage
 Disquilibriums data, and OMIM database are essential data/tool for the FGB, 
-which are required to be prepared in prior. The FGB package data bundle includes
-cytoBand, HGNC Genes, RefSeq Genes, Linkage Disquilibriums and OMIM data.
-dbSNP142 and hg19 reference sequence must be downloaded before running the FGB.
+which are required to be prepared in prior. The FGB package data bundle is
+available at http://mlg.hit.edu.cn/FGB/FGB_data_bundle.tar.gz
 	
-a) dbSNP Build 142 (latest version)
-ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/00-All.vcf.gz
-ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/00-All.vcf.gz.tbi
-
-dbSNP should be used in the 'Basic' track 'Snp'. In the config.xml.template 
-we use a chr21 data from dbSNP_CEU population as demo.
-
-b) hg19 Reference sequence
-ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/
-Please uncompress and merge all the Karyotype chromosome sequence into 
-a single FASTA file. Then using software such as SAMtools 
-(http://samtools.sourceforge.net/samtools.shtml#3) to generate a '.fai' 
-index file.
-"samtools faidx hg19.fa"
-
-c) The FGB also hold a copy of above files for users' needs:
-http://mlg.hit.edu.cn/FGB/data/dbsnp142.hg19.sorted.vcf.gz
-http://mlg.hit.edu.cn/FGB/data/dbsnp142.hg19.sorted.vcf.gz.tbi
-http://mlg.hit.edu.cn/FGB/data/hg19.tar.gz
-
 Users can also integrate their own data into FGB by customizing the 
 config.xml.template file.
 
@@ -76,4 +55,4 @@ and restart the Tomcat service to apply the changes.
 
 Please feel free to contact pgbrowser@gmail.com for any further questions.
 
-LJ Feb.3 2015
+LJ Feb.13 2015
