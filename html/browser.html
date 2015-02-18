@@ -1,0 +1,263 @@
+
+<html lang="en">
+	<head>
+		</style>
+		<link rel="stylesheet" type="text/css" href="./css/migb.css" />
+		<link rel="stylesheet" type="text/css" href="./css/jquery-ui-1.10.2.custom.min.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title id="browserTitle">Family Genome Browser</title>
+	</head>
+	<body>
+		<center>
+			<div class="overall">
+				<div style="clear:both">
+					<span id="web-name"><img src="./image/family4.png"/><b><i>Family Genome Browser</i></b></span>
+					<label id="tutorial" style="float:right;font-family: Trebuchet MS, Arial, sans-serif; padding-top:37px; cursor:pointer" onclick="window.open('tutorial.html')"><img style="vertical-align : text-bottom; width:20px;height:20px;" src="./image/help.jpg"/>Tutorial</label>
+				</div>
+
+				<div class="titlee_right" style="float:right;clear:both">
+					<ul>
+						<li id="brdview_li" onclick="setTabb('brdview')" style="left:5%">Bird's Eye View</li>
+						<li id="brwview_li" onclick="setTabb('brwview')" class="hover" style="left:35%" >Browser View</li>
+						<li id="varlist_li" onclick="setTabb('varlist')" style="right:5%">Variants List</li>
+					</ul>
+				</div>
+
+				<div class="titlee" style="float:left;">Input Pedigree and Variants</div>
+				<div class="plott_right" style="float:right;">
+					<div id="brdview" style="display:none;">
+						<div id="brd_genome" style="float:left"></div>
+						<div style="float:left">
+							<div id="brd_occupy" style="overflow:auto;width:150px;height:75px"></div>
+							<div id="brd_genelist" style="overflow:auto;height:810px"></div>
+						</div>
+					</div>
+					<div id="brwview" class="hover" style="overflow:auto">
+						<div id="navigators" style="width:100%;">
+							Gene Symbol:
+							<input style="font-family:Trebuchet MS, Arial, sans-serif; width:75px" id="search_field" size="7"/>
+							Or
+							<select style="font-family:Trebuchet MS, Arial, sans-serif" id="chrSelect">
+							</select>
+							Start:
+							<input style="font-family:Trebuchet MS, Arial, sans-serif; width:75px" id="startInput" size="7"/>
+							End:
+							<input style="font-family:Trebuchet MS, Arial, sans-serif; width:75px" id="endInput" size="7"/>
+							<input class="submitt" type="submit" onclick="jump()" value="Go"/>
+						</div>
+						<div id="brwplot"></div>
+					</div>
+					<div id="varlist" style="display:none"></div>
+				</div>
+
+				<div class="uploadd" style="height:280px;float:left;">
+					<table style="font:15px Candara, Arial, Helvetica, sans-serif">
+						<tr>
+							<td colspan="2" width="100" align="center">Track Name:</td>
+							<td>
+								<input style="width:352px;margin-left:2px; font-family:Trebuchet MS, Arial, sans-serif" id="track_name" size="40" onfocus="hide_tracknamelist();" placeholder="Please input data name here"/>
+							</td>
+							<td>
+								<input style="width:25px;height:24px; margin-left:-4px;" id="select_btn" type="image" src="./image/down.png" onclick="display_tracknamelist();"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="30" align="center"><input id="url_of_url_or_upload" name="url_or_upload" type="radio" checked></td>
+							<td>URL:</td>
+							<td colspan="2"><input style="width:377px;margin-left:2px;font-family:Trebuchet MS, Arial, sans-serif" id="vcf_url" type="text" size="40" placeholder="Please input the URL of tabix compressed and indexed VCF file"/></td>
+						</tr>
+						<tr>
+							<td width="30" align="center"><input id="upload_of_url_or_upload" name="url_or_upload" type="radio"></td>
+							<td>Data File:</td>
+							<td colspan="2"><input style="font-family:Trebuchet MS, Arial, sans-serif; border: 1px #aaa solid" id="pg_upload_file" type="file">(less than 20MB)</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td style="width:66px">Index File:</td>
+							<td colspan="2"><input style="font-family:Trebuchet MS, Arial, sans-serif; border: 1px #aaa solid" id="pg_upload_file2" type="file"></td>
+						</tr>
+						<tr>
+							<td colspan="3"><center><span id="uprogress"></span></center></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">Pedigree:</td>
+							<td colspan="2"><textarea style="width:377px;margin-left:2px;font-family:Trebuchet MS, Arial, sans-serif" id="ped_rec" rows="5" cols="45" placeholder="Please input the text of PED information"></textarea></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input class="submitt" type="submit" onclick="load_vcf()" value="Load"/></td>
+							<td><input class="submitt" type="submit" onclick="show_example()" value="Example"/></td>
+						</tr>
+					</table>
+					<span id="upload_success_vcf"></span>
+				</div>
+				<div class="blankblock" style="width:35%;float:left"></div>
+				<div class="titlee" style="float:left">
+					<ul>
+						<li id="pedtree_li" onclick="setTabb('pedtree')" class="hover" style="left:10%">Pedigree</li>
+						<li id="indlist_li" onclick="setTabb('indlist')" style="right:10%">Individual List</li>
+					</ul>
+				</div>
+				<div class="plott" style="float:left" style=" overflow:scroll; width:487px; height:586px;">
+					<div id="pedtree" class="hover">
+						<div id="pedplot"></div>
+					</div>
+					<div id="indlist" style="display:none"></div>
+				</div>
+			</div>
+
+		</center>
+		<script language="JavaScript" type="text/javascript" src="scripts/jquery-1.7.2-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/jquery-ui-1.10.2.custom.min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/jump.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/autocomplete.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/plot_ped.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/plot_var.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/plot_brd.js"></script>
+		<script language="JavaScript" type="text/javascript" src="scripts/raphael-min.js"></script>
+		<script language="JavaScript" type="text/javascript">
+			load_individuals();
+		</script>
+		<div id="select_info" class="ui-front ui-corner-all" style="display:none; position:absolute; border: 1px #ccc solid"></div>
+		<div id="select_method" class="ui-front ui-corner-all" style="display:none; background:#ddd; position:absolute; border: 1px #aaa solid">
+			<div id="select_method_pannel" style="border: 1px #aaa solid" align="right"><input type="button" style="border:0px; outline:none; cursor:pointer; background:00000000; color:black; font-weight:800" onclick="close_select_method()" value="Close"/></div>
+			<table border="0px">
+				<tr>
+					<td id="highlight_others">Highlight variants with others</td>
+				</tr>
+				<tr>
+					<td id="highlight_parents">Highlight variants with parents</td>
+				<tr>
+			</table>
+		</div>
+		<div id="SD_window" class= "ui-front ui-corner-all" style="display:none;position:absolute; border: 1px #aaa solid">
+			<div id="SD_pannel" style="border: 1px #aaa solid" align="right"><input type="button" style="border:0px; outline:none; cursor:pointer; font-weight:bold" onclick="close_shared_different()" value="Close"/></div>
+			<div id="shared_different" style="border: 1px #aaa solid; clear:both">
+				<table id="share_diff_table" class="listt_table" border="0" bordercolor="#ccc" style="border: 0px #aaa solid" cellspacing="0" cellpadding="0">
+				</table>
+			</div>
+			<div id="SD_submit" style="border: 1px #aaa solid">
+				<input class="submitt" type="submit" onclick="highlight_vars()" value="Submit"/>
+			</div>
+		</div>
+		<div id="recom_window" style="width:170px; display:none;position:absolute; background-color: #ddd;border: 1px #aaa solid">
+			<div id="recom_pannel" style="border: 1px #aaa solid">
+				<span style="margin-left:2px; font-weight:bold;font-family:Trebuchet MS, Arial, sans-serif; font-size:10px" id="indi_name"></span>
+				<span id="close_link" style="font-family:Trebuchet MS, Arial, sans-serif; font-size:12px;float:right;margin-left:12px;color:blue;cursor:pointer" onclick="close_siblings_window();">Close</span>
+			</div>
+			<div id="sibling" style="border: 1px #aaa solid; clear:both">
+				<table id="sibling_table" class="listt_table" border="0" bordercolor="#ccc" style="font-family:Trebuchet MS, Arial, sans-serif;font-size:12px; border: 0px #aaa solid" cellspacing="0" cellpadding="0">
+				</table>
+			</div>
+		</div>
+		<div id="sibling_trio_window" style="display:none;width:150px;position:absolute; background-color: #fff;border: 1px #aaa solid">
+			<div id="sibling_pannel" style="border: 1px #aaa solid; background-color: #ddd;">
+				<span style="margin-left:2px; font-weight:bold;font-family:Trebuchet MS, Arial, sans-serif; font-size:10px" id="sibling_name"></span>
+				<span id="close_link" style="font-family:Trebuchet MS, Arial, sans-serif; font-size:12px;float:right;margin-left:12px;color:blue;cursor:pointer" onclick="close_siblings_recom();">Close</span>
+			</div>
+			<div id="sibling_trio"></div>
+		</div>
+		<div id="gdflist" style="display:none;width:420px;">
+			<div id="gdf_pannel" style="border: 1px" align="right"><input type="button" style="border:0px; outline:none; cursor:pointer; background:00000000; color:white; font-weight:800" onclick="close_gdflist()" value="Close"/></div>
+			<div style="width:420px; max-height:150px;overflow-y:auto; ">
+				<table id="gdf_list" border="1px" style=" border: 0px #aaa solid;">
+					<tbody id="gdftablebody"></tbody>
+				</table>
+			</div>
+		</div>
+		<div id="vardetail" style="border:solid 1px #666;padding:4px;display:none; width:220px; height:330px; background:#ddd" bgcolor="#ddd">
+			<div style="width:220px; background:#999">
+				<span style="margin-left:2px; font-weight:bold;font-family:Trebuchet MS, Arial, sans-serif; font-size:12px" id="varname"></span>
+				<span id="vardetail_link" style="font-size:12px;font-family:Trebuchet MS, Arial, sans-serif; float:right;margin-right:2px;color:blue; text-decoration:underline; cursor:pointer">dbSNP</span>
+			</div>
+			<div style="width:220px; height:310px;overflow-y:auto; background:#ddd">
+				<table id="vd_list" style="font-size:12px; border-collapse: collapse; opacity:0.8; margin:3px; font-family:Trebuchet MS, Arial, sans-serif" bgcolor="#ddd" bordercolor="#ccc" border="1" cellspacing="0" cellpadding="0">
+					<tbody id="vdtablebody">
+						<tr>
+							<td>Position:</td>
+							<td id="vardetail_scale" style="font-size: 12px;"></td>
+						</tr>
+						<tr>
+							<td>Type:</td>
+							<td id="vardetail_type"></td>
+						</tr>
+						<tr id="vardetail_letter_trNode">
+							<td>Alt allele:</td>
+							<td id="vardetail_letter"></td>
+						</tr>
+						<tr id="vardetail_dbSNPID_trNode">
+							<td>dbSNPID:</td>
+							<td id="vardetail_dbSNPID"></td>
+						</tr>
+						<tr id="vardetail_Mate_trNode">
+							<td>Mate:</td>
+							<td id="vardetail_Mate"></td>
+						</tr>
+						<tr>
+							<td id="vardetail_info_table" colspan="2" width="100%"/>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="select_plugin" class= "ui-front ui-corner-all" style="display:none;position:absolute;z-index:100; border: 1px #aaa solid; background-color:#FFFFFF">
+			<div style="border: 1px #aaa solid; clear:both">
+				<table id="select_trackname" class="listt_table" border="0" bordercolor="#ccc" style="border: 0px #aaa solid; width:374px; font-family:Trebuchet MS, Arial, sans-serif;" cellspacing="0" cellpadding="0">
+				</table>
+			</div>
+		</div>
+		<iframe id="maskselect" style="display:none;position:absolute; top:0px; left:0px; " frameborder="0" src="about:blank"></iframe>
+	</body>
+</html>
+		<div id="gdflist" style="display:none;width:420px;">
+			<div id="gdf_pannel" style="border: 1px" align="right"><input type="button" style="border:0px; outline:none; cursor:pointer; background:00000000; color:white; font-weight:800" onclick="close_gdflist()" value="Close"/></div>
+			<div style="width:420px; max-height:150px;overflow-y:auto; ">
+				<table id="gdf_list" border="1px" style=" border: 0px #aaa solid;">
+					<tbody id="gdftablebody"></tbody>
+				</table>
+			</div>
+		</div>
+		<div id="vardetail" style="border:solid 1px #666;padding:4px;display:none; width:220px; height:240px; background:#ddd" bgcolor="#ddd">
+			<div style="width:220px; background:#999">
+				<span style="margin-left:2px; font-weight:bold;font-family:Trebuchet MS, Arial, sans-serif; font-size:12px" id="varname"></span>
+				<span id="vardetail_link" style="font-size:12px;font-family:Trebuchet MS, Arial, sans-serif; float:right;margin-right:2px;color:blue; text-decoration:underline; cursor:pointer">dbSNP</span>
+			</div>
+			<div style="width:220px; height:220px;overflow-y:auto; background:#ddd">
+				<table id="vd_list" style="font-size:12px; border-collapse: collapse; opacity:0.8; margin:3px; font-family:Trebuchet MS, Arial, sans-serif" bgcolor="#ddd" bordercolor="#ccc" border="1" cellspacing="0" cellpadding="0">
+					<tbody id="vdtablebody">
+						<tr>
+							<td>Position:</td>
+							<td id="vardetail_scale" style="font-size: 12px;"></td>
+						</tr>
+						<tr>
+							<td>Type:</td>
+							<td id="vardetail_type"></td>
+						</tr>
+						<tr id="vardetail_letter_trNode">
+							<td>Alt allele:</td>
+							<td id="vardetail_letter"></td>
+						</tr>
+						<tr id="vardetail_dbSNPID_trNode">
+							<td>dbSNPID:</td>
+							<td id="vardetail_dbSNPID"></td>
+						</tr>
+						<tr id="vardetail_Mate_trNode">
+							<td>Mate:</td>
+							<td id="vardetail_Mate"></td>
+						</tr>
+						<tr>
+							<td id="vardetail_info_table" colspan="2" width="100%"/>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="select_plugin" class= "ui-front ui-corner-all" style="display:none;position:absolute;z-index:100; border: 1px #aaa solid; background-color:#FFFFFF">
+			<div style="border: 1px #aaa solid; clear:both">
+				<table id="select_trackname" class="listt_table" border="0" bordercolor="#ccc" style="border: 0px #aaa solid; width:374px; font-family:Trebuchet MS, Arial, sans-serif;" cellspacing="0" cellpadding="0">
+				</table>
+			</div>
+		</div>
+		<iframe id="maskselect" style="display:none;position:absolute; top:0px; left:0px; " frameborder="0" src="about:blank"></iframe>
+	</body>
+</html>
