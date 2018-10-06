@@ -1,3 +1,11 @@
+UPDATE: The Family Genome Browser service has been moved to http://www.pgbrowser.org/FGB/
+
+The installation package can be downloaded at http://www.pgbrowser.org/FGB/FGB-1.0.tar.gz
+
+The FGB data bundle can be downloaded at http://www.pgbrowser.org/FGB/FGB_data_bundle.tar.gz
+
+LJ Oct.6 2018
+
 ##############################
 
 Local Installation Instruction of Family Genome Browser
