@@ -1,10 +1,10 @@
-UPDATE: The Family Genome Browser service has been moved to https://pgbrowser.nebulagene.com/FGB/
+UPDATE: The Family Genome Browser service has been moved to http://bioinformatics.hit.edu.cn/FGB/
 
-The installation package can be downloaded at https://pgbrowser.nebulagene.com/FGB/FGB-1.0.tar.gz
+The installation package can be downloaded at http://bioinformatics.hit.edu.cn/FGB/FGB-1.0.tar.gz
 
-The FGB data bundle can be downloaded at https://pgbrowser.nebulagene.com/FGB/FGB_data_bundle.tar.gz
+The FGB data bundle can be downloaded at http://bioinformatics.hit.edu.cn/FGB/FGB_data_bundle.tar.gz
 
-LJ Nov.11 2019
+LJ Jul.24 2020
 
 ##############################
 
